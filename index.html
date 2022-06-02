@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="author" content="rxrosli" />
+		<meta name="description" content="Generate Random PSEI Stocks" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Random Stocks PH</title>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter" />
+		<link rel="stylesheet" href="coolicons.css" />
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<main class="stock" id="main">
+			<!-- Description -->
+			<div class="spinner" id="spinner"></div>
+			<div class="stock__container stock__container--top" id="desc-cont">
+				<div class="stock__symbol">
+					<span id="symbol">
+				</div>
+				<div class="stock__name">
+					<span id="name">
+				</div>
+			</div>
+			<!-- Price -->
+			<div class="stock__container" id="price-cont">
+				<div class="stock__price">
+					<span id="price">
+				</div>
+				<div class="stock__percent-change">
+					<span id="percent-change">
+				</div>
+			</div>
+			<!-- Buttons -->
+			<div class="stock__container" id="button-cont">
+				<button class="stock__button" id="pick">
+					PICK AGAIN <i class="stock__icon ci-redo"></i>
+				</button>
+				<div class="stock__sub-container">
+					<button class="stock__button stock__button--side-padded" id="twitter">
+						<div><i class="stock__icon ci-twitter"></i></div>
+					</button>
+					<button class="stock__button stock__button--side-padded" id="charts">
+						<i class="stock__icon ci-line_chart_up"></i>
+					</button>
+				</div>
+			</div>
+		</main>
+		
+		<script src="script.js"></script>
+	</body>
+</html>
