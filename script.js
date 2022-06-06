@@ -28,13 +28,24 @@ let stocks = [];
 /** @type {Stock} */
 let currentStock;
 
+// Utility
 const randomLimit = (/** @type {number} */ limit) => Math.floor(Math.random() * limit);
 
+// Behavior
 const setLoading = (/**@type {boolean} */ bool) => {
 	descriptionContainer.style.display = bool ? 'none' : 'flex';
 	priceContainer.style.display = bool ? 'none' : 'flex';
 	buttonContainer.style.display = bool ? 'none' : 'flex';
 	spinner.style.display = bool ? 'flex' : 'none';
+};
+
+const fetchStocks = async () => {
+	const url = 'https://phisix-api4.appspot.com/stocks.json';
+	// const url = 'http://phisix-api4.appspot.com/stocks/BDO.2022-06-05.json'; // Returns 404
+	const response = await fetch(url);
+	if (response.status === 404) throw Error('Not Found');
+	const payload = await response.json();
+	stocks = payload.stock;
 };
 
 const pickStock = () => {
@@ -55,14 +66,6 @@ const pickStock = () => {
 	else mainContainer.className = 'stock';
 };
 
-const fetchStocks = async () => {
-	const url = 'https://phisix-api4.appspot.com/stocks.json';
-	const response = await fetch(url);
-	const payload = await response.json();
-	stocks = payload.stock;
-	console.log(stocks);
-};
-
 const tweetStock = () => {
 	// prettier-ignore
 	const tweet = `$${currentStock.symbol}: ₱${currentStock.price.amount}(${currentStock.percent_change}%)`;
@@ -76,13 +79,27 @@ const viewCharts = () => {
 	window.open(`https://www.investagrams.com/Chart/PSE:${currentStock.symbol}`);
 };
 
+const onNotFound = () => {
+	setLoading(false);
+	buttonContainer.style.display = 'none';
+	stockSymbol.textContent = '503';
+	stockName.textContent = 'Service Unavailable';
+	stockPercentChange.textContent = 'Market is closed today.';
+	mainContainer.className = 'stock stock--error';
+};
 const onLoad = async () => {
 	setLoading(true);
-	await fetchStocks();
-	pickStock();
-	setLoading(false);
+	try {
+		await fetchStocks();
+		pickStock();
+		setLoading(false);
+	} catch (error) {
+		if (error.message === 'Not Found') onNotFound();
+		console.log(error);
+	}
 };
 
+// Event Handling
 pickStockButton.addEventListener('click', pickStock);
 twitterButton.addEventListener('click', tweetStock);
 chartsButton.addEventListener('click', viewCharts);

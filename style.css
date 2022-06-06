@@ -20,6 +20,9 @@ body {
 .stock--negative {
 	background-color: #f1948a;
 }
+.stock--error {
+	background-color: #f2c979;
+}
 .stock__container {
 	display: flex;
 	align-items: center;
