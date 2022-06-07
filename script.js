@@ -23,6 +23,13 @@ const chartsButton = document.getElementById('charts');
  * @property {string} symbol
  */
 
+/**
+ * @typedef Payload
+ * @type {object}
+ * @property {Stock[]} stock
+ * @property {string} as_of
+ */
+
 /** @type {Stock[]} */
 let stocks = [];
 /** @type {Stock} */
@@ -44,7 +51,10 @@ const fetchStocks = async () => {
 	// const url = 'http://phisix-api4.appspot.com/stocks/BDO.2022-06-05.json'; // Returns 404
 	const response = await fetch(url);
 	if (response.status === 404) throw Error('Not Found');
+
+	/** @type {Payload} */
 	const payload = await response.json();
+	if (payload.stock === null) throw Error('Empty Payload');
 	stocks = payload.stock;
 };
 
@@ -79,6 +89,7 @@ const viewCharts = () => {
 	window.open(`https://www.investagrams.com/Chart/PSE:${currentStock.symbol}`);
 };
 
+// Error handling
 const onNotFound = () => {
 	setLoading(false);
 	buttonContainer.style.display = 'none';
@@ -87,6 +98,16 @@ const onNotFound = () => {
 	stockPercentChange.textContent = 'Market is closed today.';
 	mainContainer.className = 'stock stock--error';
 };
+const onEmptyPayload = () => {
+	setLoading(false);
+	buttonContainer.style.display = 'none';
+	stockSymbol.textContent = '503';
+	stockName.textContent = 'Service Unavailable';
+	stockPercentChange.textContent = 'Data is being refreshed. Please comeback later.';
+	mainContainer.className = 'stock stock--error';
+};
+
+// Event Handling
 const onLoad = async () => {
 	setLoading(true);
 	try {
@@ -95,11 +116,10 @@ const onLoad = async () => {
 		setLoading(false);
 	} catch (error) {
 		if (error.message === 'Not Found') onNotFound();
+		if (error.message === 'Empty Payload') onEmptyPayload();
 		console.log(error);
 	}
 };
-
-// Event Handling
 pickStockButton.addEventListener('click', pickStock);
 twitterButton.addEventListener('click', tweetStock);
 chartsButton.addEventListener('click', viewCharts);
