@@ -47,7 +47,7 @@ const setLoading = (/**@type {boolean} */ bool) => {
 };
 
 const fetchStocks = async () => {
-	const url = 'https://phisix-api4.appspot.com/stocks.json';
+	const url = 'https://phisix-api3.appspot.com/stocks.json';
 	// const url = 'http://phisix-api4.appspot.com/stocks/BDO.2022-06-05.json'; // Returns 404
 	const response = await fetch(url);
 	if (response.status === 404) throw Error('Not Found');
